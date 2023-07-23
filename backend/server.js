@@ -1,11 +1,10 @@
 require("dotenv").config();
 
-const express = require("express");
 const connectDB = require("./db");
+const app = require("./app");
 
-const app = express();
-
-(async () => {
+// --------------------------------
+const init = async () => {
     let isDBConnected = await connectDB();
 
     if (isDBConnected) {
@@ -14,4 +13,6 @@ const app = express();
             console.log("STARTING SERVER AT PORT: ", PORT);
         });
     }
-})();
+};
+
+init();
