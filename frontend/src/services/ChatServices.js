@@ -10,7 +10,7 @@ const chatEndpoints = {
     DELETE_CHAT: (id) => `${CHATS_ENDPOINT}/${id}`,
 };
 
-class UserServices extends HttpClient {
+class ChatServices extends HttpClient {
     static async fetchAllChats() {
         const chats = await this.get(chatEndpoints.FETCH_ALL_CHATS);
         return chats;
@@ -37,4 +37,4 @@ class UserServices extends HttpClient {
     }
 }
 
-export default UserServices;
+export default ChatServices;
