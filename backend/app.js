@@ -3,6 +3,8 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const cors = require("cors");
 
+const userRouter = require("./routes/user/userRouter");
+
 const app = express();
 
 // IMPLEMENTING CORS SO THAT OTHER WEBSITES CAN USE OUR API
@@ -31,20 +33,27 @@ if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
 }
 
-app.get("/", (req, res, next) => {
-    console.log("GET REQUEST: ");
-});
+app.use("/api/user", userRouter);
 
 app.all("*", (req, res, next) => {
-    res.status(200).json({
-        status: true,
+    res.status(404).json({
+        status: false,
         data: "Invalid URL.",
     });
 });
 
 app.use((err, req, res, next) => {
+    if (err.type === "entity.parse.failed")
+        return res.status(400).send({ status: false, message: "Invalid Data" });
+
     console.log("GLOBAL ERROR HANDLER: ", err);
-    res.status(500).send({ error: "Something went wrong" });
+    console.log("GLOBAL ERROR MESSAGE: ", err.message);
+
+    res.status(400).send({
+        status: false,
+        message: err,
+        stack: process.env.NODE_ENV === "production" ? null : err.stack,
+    });
 });
 
 module.exports = app;

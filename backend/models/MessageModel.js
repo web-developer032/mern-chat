@@ -1,6 +1,6 @@
 const { model, Schema, default: mongoose } = require("mongoose");
 
-const MessageSchema = Schema(
+const MessageSchema = new Schema(
     {
         message: {
             type: String,
