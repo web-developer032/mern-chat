@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const cors = require("cors");
 
+const globalErrorHandler = require("./controller/errorController");
 const userRouter = require("./routes/user/userRouter");
 
 const app = express();
@@ -42,18 +43,6 @@ app.all("*", (req, res, next) => {
     });
 });
 
-app.use((err, req, res, next) => {
-    if (err.type === "entity.parse.failed")
-        return res.status(400).send({ status: false, message: "Invalid Data" });
-
-    console.log("GLOBAL ERROR HANDLER: ", err);
-    console.log("GLOBAL ERROR MESSAGE: ", err.message);
-
-    res.status(400).send({
-        status: false,
-        message: err,
-        stack: process.env.NODE_ENV === "production" ? null : err.stack,
-    });
-});
+app.use(globalErrorHandler);
 
 module.exports = app;
