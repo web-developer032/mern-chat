@@ -13,19 +13,27 @@ const BASE_ENDPOINT = "http://127.0.0.1:5000";
 const headerConfig = { "Content-Type": "application/json", Credentials: "include" };
 
 class HttpClient {
-    static async get(url) {
+    static authorization;
+
+    static async get(url, headerOptions = {}) {
         const request = await fetch(`${BASE_ENDPOINT}${url}`, {
             method: HttpRequestMethods.GET,
+            headers: {
+                authorization: `Bearer ${this.authorization}`,
+                ...headerOptions,
+            },
         });
         const response = await request.json();
         return response;
     }
 
-    static async post(url, body) {
+    static async post(url, body, headerOptions = {}) {
         const request = await fetch(`${BASE_ENDPOINT}${url}`, {
             method: HttpRequestMethods.POST,
             headers: {
                 Credentials: "include",
+                authorization: `Bearer ${this.authorization}`,
+                ...headerOptions,
             },
             body: body,
         });
@@ -34,10 +42,14 @@ class HttpClient {
         return response;
     }
 
-    static async patch(url, body) {
+    static async patch(url, body, headerOptions = {}) {
         const request = await fetch(`${BASE_ENDPOINT}${url}`, {
             method: HttpRequestMethods.PATCH,
-            headers: headerConfig,
+            headers: {
+                ...headerConfig,
+                ...headerOptions,
+                authorization: `Bearer ${this.authorization}`,
+            },
             body: JSON.stringify(body),
         });
 
@@ -45,10 +57,14 @@ class HttpClient {
         return response;
     }
 
-    static async put(url, body) {
+    static async put(url, body, headerOptions = {}) {
         const request = await fetch(`${BASE_ENDPOINT}${url}`, {
             method: HttpRequestMethods.PUT,
-            headers: headerConfig,
+            headers: {
+                ...headerConfig,
+                headerOptions,
+                authorization: `Bearer ${this.authorization}`,
+            },
             body: JSON.stringify(body),
         });
 
@@ -56,9 +72,10 @@ class HttpClient {
         return response;
     }
 
-    static async delete(url) {
+    static async delete(url, headerOptions = {}) {
         const request = await fetch(`${BASE_ENDPOINT}${url}`, {
             method: HttpRequestMethods.DELETE,
+            headers: { ...headerOptions, authorization: `Bearer ${this.authorization}` },
         });
 
         const response = await request.json();

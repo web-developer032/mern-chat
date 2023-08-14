@@ -1,16 +1,18 @@
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import HttpClient from "@/services/httpClient";
+import UserServices from "@/services/USer";
 import Home from "@/pages/Home/Home";
 import Chat from "@/pages/Chat/Chat";
 
 function App() {
     useEffect(() => {
+        let token = localStorage.getItem("token");
+
+        HttpClient.authorization = token;
         (async () => {
-            const data = await fetch(
-                `http://127.0.0.1:5000/api/user/loginUsingToken?token=${localStorage.getItem(
-                    "token"
-                )}`
-            );
+            const data = await UserServices.loginUsingToken();
+
             console.log("Data: ", data);
         })();
     }, []);

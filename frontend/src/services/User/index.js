@@ -7,6 +7,7 @@ const userEndpoints = {
     CREATE_USER: `${USERS_ENDPOINT}/`,
     SIGN_UP: `${USERS_ENDPOINT}/signup`,
     LOG_IN: `${USERS_ENDPOINT}/login`,
+    LOG_IN_TOKEN: `${USERS_ENDPOINT}/loginUsingToken`,
     FETCH_USER: (id) => `${USERS_ENDPOINT}/${id}`,
     UPDATE_USER: (id) => `${USERS_ENDPOINT}/${id}`,
     DELETE_USER: (id) => `${USERS_ENDPOINT}/${id}`,
@@ -44,6 +45,15 @@ class UserServices extends HttpClient {
     static async loginUser(body) {
         try {
             const user = await this.post(userEndpoints.LOG_IN, body);
+            return user;
+        } catch (error) {
+            return error.response;
+        }
+    }
+
+    static async loginUsingToken() {
+        try {
+            const user = await this.get(userEndpoints.LOG_IN_TOKEN);
             return user;
         } catch (error) {
             return error.response;

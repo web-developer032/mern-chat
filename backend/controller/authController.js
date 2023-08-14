@@ -10,8 +10,7 @@ const createToken = (id) =>
         process.env.JWT_SECRET, // SECRET
         // OPTIONS FOR LOGIN
         {
-            // expiresIn: process.env.JWT_EXPIRE_TIME,
-            expiresIn: "10s",
+            expiresIn: process.env.JWT_EXPIRE_TIME,
         }
     );
 
@@ -99,9 +98,12 @@ const loginUser = catchAsync(async (req, res, next) => {
 });
 
 const loginUsingToken = catchAsync(async (req, res, next) => {
-    const token = req.query.token;
+    const token = req.headers.authorization?.startsWith("Bearer")
+        ? req.headers.authorization?.split(" ")[1]
+        : "";
 
-    if (req.query.token && req.query.token !== "null") {
+    console.log("TOKEN: ", token);
+    if (token) {
         const decodedData = jwt.verify(token, process.env.JWT_SECRET);
 
         if (decodedData?.id) {
