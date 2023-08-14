@@ -24,8 +24,10 @@ class HttpClient {
     static async post(url, body) {
         const request = await fetch(`${BASE_ENDPOINT}${url}`, {
             method: HttpRequestMethods.POST,
-            headers: headerConfig,
-            body: JSON.stringify(body),
+            headers: {
+                Credentials: "include",
+            },
+            body: body,
         });
 
         const response = await request.json();
