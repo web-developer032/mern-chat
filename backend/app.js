@@ -2,9 +2,11 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const cors = require("cors");
+const rateLimit = require("express-rate-limit");
 
 const globalErrorHandler = require("./controller/errorController");
 const userRouter = require("./routes/user/userRouter");
+const requestLimitGenerator = require("./utils/requestLimiter");
 
 const app = express();
 
@@ -33,6 +35,8 @@ app.use(express.urlencoded({ extended: true, limit: "10kb" })); // TO USE DATA C
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
 }
+
+app.use("/api/", requestLimitGenerator(60, 100, "one hour"));
 
 app.use("/api/user", userRouter);
 

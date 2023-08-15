@@ -1,8 +1,6 @@
 const multer = require("multer");
 const sharp = require("sharp");
 
-const USERS_IMAGE_PATH = "public/userImages";
-
 // -----------------------------
 // FOR STORING FILE DIRECTLY TO DISK (THIS WILL NOT RESIZE)
 // -----------------------------
@@ -29,18 +27,14 @@ const multerFilter = (req, file, cb) => {
     }
 };
 
-const resizeUserProfile = async (req, userId) => {
-    const filename = `${USERS_IMAGE_PATH}/user-${userId}.webp`;
-
+const resizePhoto = async (req, filename, width, height, photoFormat, quality) => {
     await sharp(req.file.buffer)
-        .resize(500, 500)
-        .toFormat("webp")
-        .webp({ quality: 90 })
+        .resize(width, height)
+        .toFormat(photoFormat)
+        .webp({ quality })
         .toFile(filename);
-
-    return filename;
 };
 
-const uploadUserPhoto = multer({ storage: multerStorage, fileFilter: multerFilter });
+const uploadSinglePhoto = multer({ storage: multerStorage, fileFilter: multerFilter });
 
-module.exports = { uploadUserPhoto, resizeUserProfile };
+module.exports = { uploadSinglePhoto, resizePhoto };

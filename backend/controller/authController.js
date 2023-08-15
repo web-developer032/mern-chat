@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
-
 const catchAsync = require("../utils/catchAsync");
 const UserModel = require("../models/UserModel");
-const { resizeUserProfile } = require("./fileController");
+const { resizePhoto } = require("./fileController");
+
+const USERS_IMAGE_PATH = "public/userImages";
 
 const createToken = (id) =>
     jwt.sign(
@@ -65,10 +66,13 @@ const signupUser = catchAsync(async (req, res, next) => {
         });
 
         if (req.file) {
-            const filename = await resizeUserProfile(req, user._id);
+            const filename = `${USERS_IMAGE_PATH}/user-${user._id}.webp`;
             user.profile = filename;
 
-            await user.save();
+            await Promise.allSettled([
+                resizePhoto(req, filename, 500, 500, "webp", 90),
+                user.save(),
+            ]);
         }
 
         user.active = undefined;
@@ -155,9 +159,12 @@ const protectRoute = catchAsync(async (req, res, next) => {
     next();
 });
 
+const refreshUser = catchAsync(async (req, res, next) => {});
+
 module.exports = {
     signupUser,
     loginUser,
     loginUsingToken,
     protectRoute,
+    refreshUser,
 };
