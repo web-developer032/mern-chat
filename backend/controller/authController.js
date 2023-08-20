@@ -51,7 +51,7 @@ const signupUser = catchAsync(async (req, res, next) => {
     }
 
     //check user credentials here
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ email }).exec();
     if (user) {
         return res.status(400).json({
             status: false,
