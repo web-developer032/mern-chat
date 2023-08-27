@@ -10,7 +10,7 @@ function globalErrorHandler(err, req, res, next) {
     console.log("GLOBAL ERROR MESSAGE: ", err.message);
     console.log("GLOBAL ERROR HANDLER: ", err);
 
-    if (err.message.startsWith("Multipart")) {
+    if (err.message?.startsWith("Multipart")) {
         statusCode = 400;
         message = "Invalid Data";
     }
