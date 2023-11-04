@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import ChatServices from "@/services/Chat";
 
 function Chat() {

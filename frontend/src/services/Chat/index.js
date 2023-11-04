@@ -1,6 +1,7 @@
 import HttpClient from "@/services/httpClient";
 
-const CHATS_ENDPOINT = "/api/chat";
+const CHATS_ENDPOINT =  import.meta.env.VITE_CHAT_API
+;
 
 const chatEndpoints = {
     FETCH_ALL_CHATS: `${CHATS_ENDPOINT}/`,

@@ -63,12 +63,12 @@ const getUserByDecodedData = async (decodedData) => {
     if (user.changedPassword(decodedData.iat))
         return next("Password changed recently. Please Login again.");
 
-        return user
-}
+    return user;
+};
 
 const refreshToken = catchAsync(async (req, res, next) => {
     const cookies = req.cookies;
-    console.log("REFRESH COOKIES: ",cookies)
+    console.log("REFRESH COOKIES: ", cookies);
 
     if (!cookies?.jwt)
         return res.status(401).json({
@@ -81,7 +81,7 @@ const refreshToken = catchAsync(async (req, res, next) => {
     const decodedData = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
     if (decodedData?.id) {
-        const user = await getUserByDecodedData(decodedData)
+        const user = await getUserByDecodedData(decodedData);
 
         const accessToken = generateAccessToken({ id: user._id });
 
@@ -103,22 +103,20 @@ const protectRoute = catchAsync(async (req, res, next) => {
     let token;
     // console.log("req.headers.authorization: ",req.headers.authorization)
     // console.log("req.headers.Authorization: ",req.headers.Authorization)
-    console.log((req.headers.authorization || req.headers.Authorization)?.startsWith("Bearer"))
+    console.log((req.headers.authorization || req.headers.Authorization)?.startsWith("Bearer"));
     if ((req.headers.authorization || req.headers.Authorization)?.startsWith("Bearer")) {
         token = (req.headers.authorization || req.headers.Authorization).split(" ")[1];
     }
 
-
-
     if (!token) return next("Unauthorized!");
 
-    console.log("PROTECTED TOKEN: ",token)
+    console.log("PROTECTED TOKEN: ", token);
     // 2) VERIFY TOKEN
     const decodedData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     if (decodedData?.id) {
         // 3) CHECK IF USER STILL EXISTS
-        const user = await getUserByDecodedData(decodedData)
+        const user = await getUserByDecodedData(decodedData);
 
         req.user = user;
 
@@ -196,7 +194,7 @@ const loginUser = catchAsync(async (req, res, next) => {
 
 const logoutUser = catchAsync(async (req, res, next) => {
     const cookies = req.cookies;
-    console.log("LOGOUT COOKIES: ",cookies)
+    console.log("LOGOUT COOKIES: ", cookies);
 
     if (!cookies?.jwt) return res.sendStatus(204); // NO CONTENT
 
@@ -213,7 +211,7 @@ const logoutUser = catchAsync(async (req, res, next) => {
 });
 
 const loginUsingToken = catchAsync(async (req, res, next) => {
-        let token;
+    let token;
     if ((req.headers.authorization || req.headers.Authorization)?.startsWith("Bearer")) {
         token = (req.headers.authorization || req.headers.Authorization).split(" ")[1];
     }

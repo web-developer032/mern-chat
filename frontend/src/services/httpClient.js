@@ -6,9 +6,8 @@ const HttpRequestMethods = {
     DELETE: "DELETE",
 };
 
-const BASE_ENDPOINT = "http://127.0.0.1:5000";
-// const USER_ENDPOINT = "http://127.0.0.1:5000/user";
-// const CHAT_ENDPOINT = "http://127.0.0.1:5000/chat";
+const BASE_ENDPOINT = import.meta.env.VITE_BASEURL;
+
 
 const headerConfig = { "Content-Type": "application/json", Credentials: "include" };
 

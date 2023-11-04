@@ -2,7 +2,6 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const cors = require("cors");
-const rateLimit = require("express-rate-limit");
 
 const globalErrorHandler = require("./controller/errorController");
 const userRouter = require("./routes/user/userRouter");
@@ -10,7 +9,7 @@ const requestLimitGenerator = require("./utils/requestLimiter");
 
 const app = express();
 
-// IMPLEMENTING CORS SO THAT OTHER WEBSITES CAN USE OUR API
+// IMPLEMENTING CORS SO THAT OTHER WEBSITES CANNOT USE OUR API
 app.use(
     cors({
         origin: "http://127.0.0.1:5173",

@@ -2,10 +2,12 @@ import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import HttpClient from "@/services/httpClient";
 import UserServices from "@/services/USer";
-import Home from "@/pages/Home/Home";
-import Chat from "@/pages/Chat/Chat";
+import Home from "@/pages/Home";
+import Chat from "@/pages/Chat";
 
 function App() {
+    console.log("VITE_SOME_KEY: ",import.meta.env.VITE_USER_API) // 123
+
     useEffect(() => {
         let token = localStorage.getItem("token");
 
